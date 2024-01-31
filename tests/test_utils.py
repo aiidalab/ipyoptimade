@@ -26,15 +26,15 @@ def test_fetch_providers_content():
     """Test known content in dict of database providers"""
     from ipyoptimade.utils import fetch_providers
 
-    exmpl =  {
-        'type': 'links', 
-        'id': 'exmpl', 
-        'attributes': {
-            'name': 'Example provider', 
-            'description': 'Provider used for examples, not to be assigned to a real database', 
-            'base_url': 'https://providers.optimade.org/index-metadbs/exmpl', 
-            'homepage': 'https://example.com', 
-            'link_type': 'external',
+    exmpl = {
+        "type": "links",
+        "id": "exmpl",
+        "attributes": {
+            "name": "Example provider",
+            "description": "Provider used for examples, not to be assigned to a real database",
+            "base_url": "https://providers.optimade.org/index-metadbs/exmpl",
+            "homepage": "https://example.com",
+            "link_type": "external",
         },
     }
 
