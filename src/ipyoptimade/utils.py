@@ -304,7 +304,7 @@ LOGGER.debug("All known version editions: %s", VERSION_PARTS)
 
 
 def get_versioned_base_url(  # pylint: disable=too-many-branches
-    base_url: Union[str, dict, Link, AnyUrl]
+    base_url: Union[str, dict, Link, AnyUrl],
 ) -> str:
     """Retrieve the versioned base URL
 

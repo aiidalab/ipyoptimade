@@ -312,7 +312,7 @@ class FilterInputParser:
 
     @staticmethod
     def elements(
-        value: Tuple[bool, Dict[str, int]]
+        value: Tuple[bool, Dict[str, int]],
     ) -> Tuple[Union[List[str], List[Tuple[str]]], List[str]]:
         """Extract included and excluded elements"""
         use_all = value[0]
