@@ -13,18 +13,6 @@ repos:
   - id: black
     name: Blacken
 
-- repo: local
-  hooks:
-  - id: codecov-validator
-    name: Validate .codecov.yml
-    description: Validate .codecov.yml using codecov's online validation tool.
-    entry: ./.ci/codecov_validator.sh
-    files: >
-      (?x)^(
-        .codecov.yml
-      )$
-    language: system
-
 - repo: https://github.com/PyCQA/flake8
   rev: 6.1.0
   hooks:

@@ -13,4 +13,4 @@ build/
 .*.ipynb
 
 # logging
-optimade_client.log*
+ipyoptimade.log*

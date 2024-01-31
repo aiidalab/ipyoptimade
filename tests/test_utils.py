@@ -9,7 +9,7 @@ def test_fetch_providers_wrong_url():
     """
     import json
 
-    from optimade_client import utils
+    from ipyoptimade import utils
 
     wrong_url = "https://this.is.a.wrong.url"
 
@@ -24,17 +24,17 @@ def test_fetch_providers_wrong_url():
 
 def test_fetch_providers_content():
     """Test known content in dict of database providers"""
-    from optimade_client.utils import fetch_providers
+    from ipyoptimade.utils import fetch_providers
 
-    exmpl = {
-        "type": "links",
-        "id": "exmpl",
-        "attributes": {
-            "name": "Example provider",
-            "description": "Provider used for examples, not to be assigned to a real database",
-            "base_url": "http://providers.optimade.org/index-metadbs/exmpl",
-            "homepage": "https://example.com",
-            "link_type": "external",
+    exmpl =  {
+        'type': 'links', 
+        'id': 'exmpl', 
+        'attributes': {
+            'name': 'Example provider', 
+            'description': 'Provider used for examples, not to be assigned to a real database', 
+            'base_url': 'https://providers.optimade.org/index-metadbs/exmpl', 
+            'homepage': 'https://example.com', 
+            'link_type': 'external',
         },
     }
 
@@ -45,7 +45,7 @@ def test_exmpl_not_in_list():
     """Make sure the 'exmpl' database provider is not in the final list"""
     from optimade.models import LinksResourceAttributes
 
-    from optimade_client.utils import get_list_of_valid_providers
+    from ipyoptimade.utils import get_list_of_valid_providers
 
     exmpl = (
         "Example provider",
@@ -105,7 +105,7 @@ def test_ordered_query_url():
 
     Testing already sorted URLs, making sure they come out exactly the same as when they came in.
     """
-    from optimade_client.utils import ordered_query_url
+    from ipyoptimade.utils import ordered_query_url
 
     normal_url = (
         "https://optimade.materialsproject.org/v1/structures?filter=%28+nelements%3E%3D1+AND+"

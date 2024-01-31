@@ -4,9 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - develop
-      - stable
-      - 'push-action/**'
+      - main
 
 jobs:
   basic_tests:
@@ -58,16 +56,16 @@ jobs:
         pip install -e .[testing]
 
     - name: PyTest
-      run: pytest -vvv --cov=optimade_client --cov-report=xml --cov-append tests/
+      run: pytest -vvv --cov=ipyoptimade --cov-report=xml --cov-append tests/
 
     - name: Install server dependencies
       run: pip install -e .[server]
 
     - name: PyTest (with 'server' extra)
-      run: pytest --cov=optimade_client --cov-report=xml --cov-append tests/cli/
+      run: pytest --cov=ipyoptimade --cov-report=xml --cov-append tests/cli/
 
     - name: Upload coverage to Codecov
-      if: matrix.python-version == '3.9' && github.repository == 'CasperWA/voila-optimade-client'
+      if: matrix.python-version == '3.9' && github.repository == 'aiidalab/ipyoptimade'
       uses: codecov/codecov-action@v3
       with:
         name: optimade-client
