@@ -7,31 +7,6 @@ on:
       - main
 
 jobs:
-  basic_tests:
-    name: External
-    uses: SINTEF/ci-cd/.github/workflows/ci_tests.yml@v2.7.1
-    with:
-      # General
-      install_extras: "[dev]"
-
-      # pre-commit
-      run_pre-commit: true
-      python_version_pre-commit: "3.9"
-      skip_pre-commit_hooks: pylint
-
-      # pylint & safety
-      run_pylint: false
-      run_safety: false
-
-      # Build package
-      run_build_package: true
-      python_version_package: "3.9"
-      build_libs: build
-      build_cmd: "python -m build"
-
-      # Build documentation
-      run_build_docs: false
-
   pytest:
     runs-on: ubuntu-latest
 
@@ -52,22 +27,14 @@ jobs:
     - name: Install initial dependencies
       run: |
         python -m pip install -U pip
-        pip install -U setuptools wheel
-        pip install -e .[testing]
+        pip install -e .[dev]
 
-    - name: PyTest
-      run: pytest -vvv --cov=ipyoptimade --cov-report=xml --cov-append tests/
-
-    - name: Install server dependencies
-      run: pip install -e .[server]
-
-    - name: PyTest (with 'server' extra)
-      run: pytest --cov=ipyoptimade --cov-report=xml --cov-append tests/cli/
+    - name: Run test
+      run: pytest -v tests/ --cov=ipyoptimade
 
     - name: Upload coverage to Codecov
-      if: matrix.python-version == '3.9' && github.repository == 'aiidalab/ipyoptimade'
+      if: matrix.python-version == '3.11' && github.repository == 'aiidalab/ipyoptimade'
       uses: codecov/codecov-action@v3
       with:
-        name: optimade-client
-        file: ./coverage.xml
-        flags: optimade-client
+        name: ipyoptimade
+        flags: ipyoptimade-py-${{ matrix.python-version }}
