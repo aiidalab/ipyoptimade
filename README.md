@@ -2,7 +2,7 @@
 
 [![MaterialsCloud](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/CasperWA/voila-optimade-client/develop/docs/resources/mcloud_badge.json)](https://materialscloud.org/optimadeclient/)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aiidalab/ipyoptimade/main?urlpath=%2Fvoila%2Frender%2Foptimade-client.ipynb)
-[![codecov](https://codecov.io/gh/aiidalab/ipyoptimade/branch/master/graph/badge.svg)](https://codecov.io/gh/aiidalab/ipyoptimade)
+[![codecov](https://codecov.io/gh/aiidalab/ipyoptimade/branch/main/graph/badge.svg)](https://codecov.io/gh/aiidalab/ipyoptimade)
 
 Query for and import structures from [OPTIMADE](https://www.optimade.org) providers (COD, MaterialsCloud, NoMaD, Materials Project, ODBX, OQMD, and more ...).
 
