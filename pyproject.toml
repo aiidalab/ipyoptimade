@@ -50,6 +50,7 @@ dev = [
     "pre-commit~=3.6",
     "pytest~=7.4",
     "pytest-cov~=4.1",
+    "bumpver~=2023.1129",
 ]
 
 [project.urls]
@@ -59,3 +60,18 @@ Tracker = "https://github.com/aiidalab/ipyoptimade/issues"
 
 [tool.flit.module]
 name = "ipyoptimade"
+
+[bumpver]
+current_version = "0.1.0"
+version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
+commit_message = "Bump version: {old_version} -> {new_version}"
+commit = true
+push = true
+
+[bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+]
+"src/ipyoptimade/version.py" = [
+    '__version__ = "{version}"',
+]
