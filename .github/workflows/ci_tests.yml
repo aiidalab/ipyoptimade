@@ -34,7 +34,7 @@ jobs:
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.11' && github.repository == 'aiidalab/ipyoptimade'
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         name: ipyoptimade
         flags: ipyoptimade-py-${{ matrix.python-version }}
@@ -52,4 +52,5 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }} # aiidalabbot
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         IMAGE_NAME: aiidalab/ipyoptimade
-        MYBINDERORG_CACHE: true
+        BINDER_CACHE: true
+        PUBLIC_REGISTRY_CHECK: true
