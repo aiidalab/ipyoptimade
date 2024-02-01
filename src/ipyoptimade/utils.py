@@ -321,6 +321,8 @@ def get_versioned_base_url(  # pylint: disable=too-many-branches
         base_url = base_url.get("href", "")
     elif isinstance(base_url, Link):
         base_url = base_url.href
+    elif isinstance(base_url, AnyUrl):
+        base_url = str(base_url)
 
     LOGGER.debug("Retrieving versioned base URL for %r", base_url)
 

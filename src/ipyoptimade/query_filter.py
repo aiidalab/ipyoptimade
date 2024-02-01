@@ -4,12 +4,14 @@ import traceback
 import traitlets
 import ipywidgets as ipw
 import requests
+import semver
 from json import JSONDecodeError
 
 from optimade.adapters import Structure
 from optimade.adapters.structures.utils import species_from_species_at_sites
 from optimade.models import LinksResourceAttributes
-from optimade.models.utils import CHEMICAL_SYMBOLS, SemanticVersion
+from optimade.models.utils import CHEMICAL_SYMBOLS
+from optimade.models.types import SemanticVersion
 
 from ipyoptimade.exceptions import BadResource, QueryError
 from ipyoptimade.logger import LOGGER
@@ -304,10 +306,14 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
 
         LOGGER.debug("Semantic version: %r", version)
 
-        if version.base_version > critical_version.base_version:
+        # parse the version string to a semantic version object
+        critical_version = semver.Version.parse(critical_version)
+        version = semver.Version.parse(version)
+
+        if version.finalize_version() > critical_version.finalize_version():
             return True
 
-        if version.base_version == critical_version.base_version:
+        if version.finalize_version == critical_version.finalize_version:
             if version.prerelease:
                 return version.prerelease >= critical_version.prerelease
 
