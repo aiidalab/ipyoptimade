@@ -38,3 +38,18 @@ jobs:
       with:
         name: ipyoptimade
         flags: ipyoptimade-py-${{ matrix.python-version }}
+
+  binder:
+    runs-on: ubuntu-latest
+    needs: pytest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: update jupyter dependencies with repo2docker
+      uses: jupyterhub/repo2docker-action@master
+      with:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }} # aiidalabbot
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        IMAGE_NAME: aiidalab/ipyoptimade
+        MYBINDERORG_CACHE: true
