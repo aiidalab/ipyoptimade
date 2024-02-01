@@ -1,11 +1,12 @@
 # OPTIMADE client (in Voilà)
 
 [![MaterialsCloud](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/CasperWA/voila-optimade-client/develop/docs/resources/mcloud_badge.json)](https://materialscloud.org/optimadeclient/)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/CasperWA/voila-optimade-client/develop?urlpath=%2Fvoila%2Frender%2FOPTIMADE-Client.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aiidalab/ipyoptimade/main?urlpath=%2Fvoila%2Frender%2Foptimade-client.ipynb)
+[![codecov](https://codecov.io/gh/aiidalab/ipyoptimade/branch/master/graph/badge.svg)](https://codecov.io/gh/aiidalab/ipyoptimade)
 
 Query for and import structures from [OPTIMADE](https://www.optimade.org) providers (COD, MaterialsCloud, NoMaD, Materials Project, ODBX, OQMD, and more ...).
 
-Current supported OPTIMADE API versions: `1.0.0`, `1.0.0-rc.2`, `1.0.0-rc.1`, `0.10.1`
+Current supported OPTIMADE API versions: `1.1.0`, `1.0.0`, `1.0.0-rc.2`, `1.0.0-rc.1`, `0.10.1`
 
 ## Run the client
 
@@ -45,7 +46,7 @@ Then you can filter to find a family of structures according to elements, number
 See the [OPTIMADE API specification](https://github.com/Materials-Consortia/OPTiMaDe/blob/master/optimade.rst) for the full list of filter options and their description.
 
 In order to delve deeper into the details of a particular structure, you can also import and display `OptimadeResultsWidget`.  
-See the notebook [`OPTIMADE-Client.ipynb`](OPTIMADE-Client.ipynb) for an example of how to set up a general purpose OPTIMADE importer.
+See the notebook [`optimade-client.ipynb`](optimade-client.ipynb) for an example of how to set up a general purpose OPTIMADE importer.
 
 #### Embedded
 
@@ -83,34 +84,7 @@ Note, the `OptimadeQueryWidget` mentioned above is a special wrapper widget in A
 
 ### Running application locally
 
-First, you will need to install the package either from [PyPI](https://pypi.org/project/optimade-client) or by retrieving the git repository hosted on [GitHub](https://github.com/CasperWA/voila-optimade-client).
-
-#### PyPI
-
-```shell
-pip install optimade-client[server]
-```
-
-#### GitHub
-
-```shell
-git clone https://github.com/CasperWA/voila-optimade-client.git
-cd voila-optimade-client
-pip install .[server]
-```
-
-Note, it is important to install the `server` extra in order to also install the `voila` package (and the `ase` package for a wider variety of download formats).
-
-To now run the application (notebook) [`OPTIMADE-Client.ipynb`](OPTIMADE-Client.ipynb) you can simply run the command `optimade-client` in a terminal and go to the printed URL (usually <http://localhost:8866>) or pass the `--open-browser` option to let the program try to automatically open your default browser.
-
-The application will be run in Voilà using Voilà's own `tornado`-based server.
-The configuration will automatically be copied to Jupyter's configuration directory before starting the server.
-
-```shell
-optimade-client
-```
-
-For a list of all options that can be passed to `optimade-client` use the `-h/--help` option.
+(Upcoming)
 
 ## Contribute
 
