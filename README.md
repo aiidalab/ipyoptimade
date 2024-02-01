@@ -60,7 +60,7 @@ The package's widgets can be used in any general Jupyter notebook as well as Aii
 Example:
 
 ```python
-from optimade_client import
+from ipyoptimade import
     OptimadeQueryProviderWidget,
     OptimadeQueryFilterWidget,
     OptimadeSummaryWidget
@@ -127,8 +127,8 @@ To start making contributions, fork the repository and create PRs.
 
 ## Configuration (Voilà)
 
-For running the application (in Voilà) on Binder, the configuration file [`jupyter_config.json`](optimade_client/jupyter_config.json) can be used.  
-If you wish to start the Voilà server locally with the same configuration, either copy the [`jupyter_config.json`](optimade_client/jupyter_config.json) file to your Jupyter config directory, renaming it to `voila.json` or pass the configurations when you start the server using the CLI.
+For running the application (in Voilà) on Binder, the configuration file [`jupyter_config.json`](ipyoptimade/jupyter_config.json) can be used.  
+If you wish to start the Voilà server locally with the same configuration, either copy the [`jupyter_config.json`](ipyoptimade/jupyter_config.json) file to your Jupyter config directory, renaming it to `voila.json` or pass the configurations when you start the server using the CLI.
 
 > **Note**: `jupyter_config.json` is automatically copied over as `voila.json` when running the application using the `optimade-client` command.
 
@@ -149,7 +149,7 @@ To see the full list of configurations you can call `voila` and pass `--help-all
 
 ### Running with "development" providers (Materials Cloud-specific)
 
-Set the environment variable `OPTIMADE_CLIENT_DEVELOPMENT_MODE` to `1` (the integer version for `True` (`1`) or `False` (`0`)) in order to force the use of development servers for providers (currently only relevant for Materials Cloud).
+Set the environment variable `ipyoptimade_DEVELOPMENT_MODE` to `1` (the integer version for `True` (`1`) or `False` (`0`)) in order to force the use of development servers for providers (currently only relevant for Materials Cloud).
 
 ## License
 
