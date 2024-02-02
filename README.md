@@ -84,20 +84,9 @@ Note, the `OptimadeQueryWidget` mentioned above is a special wrapper widget in A
 
 ### Running application locally
 
-(Upcoming)
-
-## Contribute
-
-If you wish to contribute to the application, you can install it in "editable" mode by using the `-e` flag: `pip install -e .[dev]`.
-It is recommended that you use the GitHub-route mentioned above.
-
-You should also install `pre-commit` in the cloned git repository by running:
-
-```shell
-pre-commit install
-```
-
-To start making contributions, fork the repository and create PRs.
+To run the application locally, you need to have Jupyter installed.
+You can then run the application by opening the notebook [`optimade-client.ipynb`](optimade-client.ipynb) in Jupyter and running all cells.
+If you have the `voila` package installed, you can also run the application in Voilà by clicking the Voilà button in the Jupyter notebook toolbar.
 
 ## Configuration (Voilà)
 
@@ -124,6 +113,20 @@ To see the full list of configurations you can call `voila` and pass `--help-all
 ### Running with "development" providers (Materials Cloud-specific)
 
 Set the environment variable `ipyoptimade_DEVELOPMENT_MODE` to `1` (the integer version for `True` (`1`) or `False` (`0`)) in order to force the use of development servers for providers (currently only relevant for Materials Cloud).
+
+## Contribute
+
+If you wish to contribute to the application, you can install it in "editable" mode by using the `-e` flag: `pip install -e .[dev]`.
+It is recommended that you use the GitHub-route mentioned above.
+
+You should also install `pre-commit` in the cloned git repository by running:
+
+```shell
+pre-commit install
+```
+
+To start making contributions, fork the repository and create PRs.
+
 
 ## For maintainers
 
