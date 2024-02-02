@@ -43,60 +43,20 @@ def test_fetch_providers_content():
 
 def test_exmpl_not_in_list():
     """Make sure the 'exmpl' database provider is not in the final list"""
-    from optimade.models import LinksResourceAttributes
-
     from ipyoptimade.utils import get_list_of_valid_providers
 
-    exmpl = (
-        "Example provider",
-        LinksResourceAttributes(
-            **{
-                "name": "Example provider",
-                "description": "Provider used for examples, not to be assigned to a real database",
-                "base_url": "https://example.com/index/optimade",
-                "homepage": "https://example.com",
-                "link_type": "external",
-            }
-        ),
-    )
-
-    mcloud = (
-        "Materials Cloud",
-        LinksResourceAttributes(
-            **{
-                "name": "Materials Cloud",
-                "description": "A platform for Open Science built for seamless "
-                "sharing of resources in computational materials science",
-                "base_url": "https://www.materialscloud.org/optimade/v1",
-                "homepage": "https://www.materialscloud.org",
-                "link_type": "external",
-            }
-        ),
-    )
-
-    odbx = (
-        "open database of xtals",
-        LinksResourceAttributes(
-            **{
-                "name": "open database of xtals",
-                "description": "A public database of crystal structures mostly derived from ab "
-                "initio structure prediction from the group of Dr Andrew Morris at the University "
-                "of Birmingham https://ajm143.github.io",
-                "base_url": "https://optimade-index.odbx.science/v1",
-                "homepage": "https://odbx.science",
-                "link_type": "external",
-            }
-        ),
-    )
+    exmpl = "Example provider"
+    mcloud = "Materials Cloud"
+    odbx = "open database of xtals"
 
     list_of_database_providers, disabled_providers = get_list_of_valid_providers()
+    providers = [name for name, _ in list_of_database_providers]
 
-    assert exmpl not in list_of_database_providers, list_of_database_providers
+    assert exmpl not in providers, providers
+    assert mcloud in providers, providers
+    assert odbx in providers, providers
     assert (
-        mcloud in list_of_database_providers or odbx in list_of_database_providers
-    ), list_of_database_providers
-    assert (
-        mcloud[0] not in disabled_providers or odbx[0] not in disabled_providers
+        mcloud not in disabled_providers or odbx not in disabled_providers
     ), disabled_providers
 
 
