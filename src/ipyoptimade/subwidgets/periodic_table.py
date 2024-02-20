@@ -1,16 +1,16 @@
 import ipywidgets as ipw
 
-from widget_periodictable import PTableWidget
-
 from ipyoptimade.logger import LOGGER
 from ipyoptimade.utils import ButtonStyle
+
+from ._periodic_table import PeriodicTableWidget
 
 
 __all__ = ("PeriodicTable",)
 
 
 class PeriodicTable(ipw.VBox):
-    """Wrapper-widget for PTableWidget"""
+    """Wrapper-widget for PeriodicTableWidget"""
 
     def __init__(self, extended: bool = True, **kwargs):
         self._disabled = kwargs.get("disabled", False)
@@ -30,7 +30,7 @@ class PeriodicTable(ipw.VBox):
             layout={"width": "auto"},
             disabled=self.disabled,
         )
-        self.ptable = PTableWidget(**kwargs)
+        self.ptable = PeriodicTableWidget(**kwargs)
         self.ptable_container = ipw.VBox(
             children=(self.select_any_all, self.ptable),
             layout={
@@ -49,9 +49,9 @@ class PeriodicTable(ipw.VBox):
 
     @property
     def value(self) -> dict:
-        """Return value for wrapped PTableWidget"""
+        """Return value for wrapped PeriodicTableWidget"""
         LOGGER.debug(
-            "PeriodicTable: PTableWidget.selected_elements = %r",
+            "PeriodicTable: PeriodicTableWidget.selected_elements = %r",
             self.ptable.selected_elements,
         )
         LOGGER.debug(
