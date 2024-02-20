@@ -32,7 +32,7 @@ class ExtendedDropdownView extends SelectionView {
       this.listbox.selectedIndex = index === null ? -1 : index;
       return super.update();
     }
-  
+
     /** @return {void} */
     _updateOptions() {
       this.listbox.textContent = '';
@@ -46,14 +46,14 @@ class ExtendedDropdownView extends SelectionView {
         this.listbox.appendChild(option);
       }
     }
-  
+
     /** @return {{ [key: string]: string }} */
     events() {
       return {
         'change select': '_handle_change',
       };
     }
-  
+
     /**
      * Handle when a new value is selected.
      */
@@ -66,7 +66,7 @@ class ExtendedDropdownView extends SelectionView {
       );
       this.touch();
     }
-  
+
     /**
      * Handle message sent to the front end.
      */
