@@ -13,3 +13,15 @@ repos:
         - id: ruff
           args: [--fix]
         - id: ruff-format
+
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.7.1
+    hooks:
+        - id: nbqa-pyupgrade
+          args: [--py39-plus]
+        - id: nbqa-ruff
+
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.6.1
+    hooks:
+        - id: nbstripout
