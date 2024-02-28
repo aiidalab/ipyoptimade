@@ -228,6 +228,8 @@ class PeriodicTableView {
 
 
   render() {
+    // add event listener
+
     // I render the widget
     this.rerenderScratch()
 
@@ -242,90 +244,6 @@ class PeriodicTableView {
     this.model.on("change:border_color", this.rerenderScratch, this)
     this.model.on("change:width", this.rerenderScratch, this)
     this.model.on("change:disabled", this.rerenderScratch, this)
-  }
-
-  events() {
-    return {
-      "click .periodic-table-entry": "toggleElement",
-      "click .periodic-table-disabled": "toggleElement"
-    }
-  }
-
-  toggleElement(event) {
-    const classNames = _.map(event.target.classList, a => {
-      return a
-    })
-    const elementName = _.chain(classNames)
-      .filter(a => {
-        return a.startsWith("element-")
-      })
-      .map(a => {
-        return a.slice("element-".length)
-      })
-      .first()
-      .value()
-
-    const isOn = _.includes(classNames, "elementOn")
-    const isDisabled = _.includes(classNames, "periodic-table-disabled")
-    // If this button is disabled, do not do anything
-    // (Actually, this function should not be triggered if the button
-    // is disabled, this is just a safety measure)
-
-    const states = this.model.get("states")
-    const disabled = this.model.get("disabled")
-
-    if (disabled) {
-      return
-    }
-
-    // Check if we understood which element we are
-    if (typeof elementName !== "undefined") {
-      const currentList = this.model.get("selected_elements")
-      // NOTE! it is essential to duplicate the list,
-      // otherwise the value will not be updated.
-
-      let newList = []
-      const newStatesList = []
-
-      for (const key in currentList) {
-        newList.push(key)
-        newStatesList.push(currentList[key])
-      }
-
-      const num = newList.indexOf(elementName)
-
-      if (isOn) {
-        // remove the element from the selected_elements
-
-        if (newStatesList[num] < states - 1) {
-          newStatesList[num]++
-          currentList[elementName] = newStatesList[num]
-        } else {
-          newList = _.without(newList, elementName)
-          newStatesList.splice(num, 1)
-          delete currentList[elementName]
-          // Swap CSS state
-          event.target.classList.remove("elementOn")
-        }
-      } else if (!isDisabled) {
-        // add the element from the selected_elements
-        newList.push(elementName)
-        newStatesList.push(0)
-        currentList[elementName] = 0
-        // Swap CSS state
-        event.target.classList.add("elementOn")
-      } else {
-        return
-      }
-
-      // Update the model (send back data to python)
-      // I have to make some changes, since there is some issue
-      // for Dict in Traitlets, which cannot trigger the update
-      this.model.set("selected_elements", { Du: 0 })
-      this.touch()
-      this.model.set("selected_elements", currentList)
-      this.touch()
-    }
   }
 
   rerenderScratch() {
@@ -405,6 +323,92 @@ class PeriodicTableView {
         disabled: this.model.get("disabled")
       }) +
       "</div>"
+
+    function myFunction(event) {
+      console.log("tttttt")
+      const classNames = _.map(event.target.classList, a => {
+        return a
+      })
+      const elementName = _.chain(classNames)
+        .filter(a => {
+          return a.startsWith("element-")
+        })
+        .map(a => {
+          return a.slice("element-".length)
+        })
+        .first()
+        .value()
+
+      const isOn = _.includes(classNames, "elementOn")
+      const isDisabled = _.includes(classNames, "periodic-table-disabled")
+      // If this button is disabled, do not do anything
+      // (Actually, this function should not be triggered if the button
+      // is disabled, this is just a safety measure)
+
+      const states = this.model.get("states")
+      const disabled = this.model.get("disabled")
+
+      if (disabled) {
+        return
+      }
+
+      // Check if we understood which element we are
+      if (typeof elementName !== "undefined") {
+        const currentList = this.model.get("selected_elements")
+        // NOTE! it is essential to duplicate the list,
+        // otherwise the value will not be updated.
+
+        let newList = []
+        const newStatesList = []
+
+        for (const key in currentList) {
+          newList.push(key)
+          newStatesList.push(currentList[key])
+        }
+
+        const num = newList.indexOf(elementName)
+
+        if (isOn) {
+          // remove the element from the selected_elements
+
+          if (newStatesList[num] < states - 1) {
+            newStatesList[num]++
+            currentList[elementName] = newStatesList[num]
+          } else {
+            newList = _.without(newList, elementName)
+            newStatesList.splice(num, 1)
+            delete currentList[elementName]
+            // Swap CSS state
+            event.target.classList.remove("elementOn")
+          }
+        } else if (!isDisabled) {
+          // add the element from the selected_elements
+          newList.push(elementName)
+          newStatesList.push(0)
+          currentList[elementName] = 0
+          // Swap CSS state
+          event.target.classList.add("elementOn")
+        } else {
+          return
+        }
+
+        // Update the model (send back data to python)
+        // I have to make some changes, since there is some issue
+        // for Dict in Traitlets, which cannot trigger the update
+        this.model.set("selected_elements", { Du: 0 })
+        this.touch()
+        this.model.set("selected_elements", currentList)
+        this.touch()
+      }
+    }
+
+    this.elementEntries = this.el.querySelectorAll(".periodic-table-entry")
+
+    // add listenter to each element
+    for (const elementEntry of this.elementEntries) {
+      console.log("tttt")
+      elementEntry.addEventListener("click", myFunction.bind(this))
+    }
   }
 
   destroy() {
