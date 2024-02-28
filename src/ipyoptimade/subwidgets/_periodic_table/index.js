@@ -407,54 +407,8 @@ class PeriodicTableView {
       "</div>"
   }
 
-  renderBorder() {
-    const a = document.getElementsByClassName("periodic-table-entry")
-    const color = this.model.get("border_color")
-
-    for (let i = 0; i < a.length; i++) {
-      a[i].style.border = "1px solid " + color
-    }
-  }
-
-  renderWidth() {
-    const a = document.getElementsByClassName("periodic-table-entry")
-    const b = document.getElementsByClassName("periodic-table-disabled")
-    const c = document.getElementsByClassName("periodic-table-empty")
-    const w = this.model.get("width")
-    let fontSize = 14.0
-
-    fontSize = (Number.parseFloat(w.slice(0, -2)) / 38.0) * 14.0
-    $("body").css("font-size", String(fontSize) + "px")
-    // document.getElementsByTagName('body')[0].style.fontSize = String(fontSize) + "px";
-
-    for (let i = 0; i < a.length; i++) {
-      a[i].style.width = w
-      a[i].style.height = w
-    }
-
-    for (let i = 0; i < b.length; i++) {
-      b[i].style.width = w
-      b[i].style.height = w
-    }
-
-    for (let i = 0; i < c.length; i++) {
-      c[i].style.width = w
-      c[i].style.height = w
-    }
-  }
-
   destroy() {
-    // TODO:
-    this.model.off("change:selected_elements", this.rerenderScratch, this)
-    this.model.off("change:disabled_elements", this.rerenderScratch, this)
-    this.model.off(
-      "change:display_names_replacements",
-      this.rerenderScratch,
-      this
-    )
-    this.model.off("change:border_color", this.rerenderScratch, this)
-    this.model.off("change:width", this.rerenderScratch, this)
-    this.model.off("change:disabled", this.rerenderScratch, this)
+    // TODO: remove event listeners
   }
 }
 
