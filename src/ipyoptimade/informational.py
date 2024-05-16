@@ -39,15 +39,11 @@ class HeaderDescription(ipw.VBox):
 <b>Source code</b>: <a href="{SOURCE_URL}" target="_blank">GitHub</a>
 </p>
 """
-    DESCRIPTION = f"""<p style="line-height:1.5;font-size:14px;">
+    DESCRIPTION = """<p style="line-height:1.5;font-size:14px;">
 This is a friendly client to search through databases and other implementations exposing an OPTIMADE RESTful API.
 To get more information about the OPTIMADE API,
 please see <a href="https://www.optimade.org/" target="_blank">the offical web page</a>.
 All providers are retrieved from <a href="https://providers.optimade.org/" target="_blank">the OPTIMADE consortium's list of providers</a>.
-</p>
-<p style="line-height:1.5;font-size:14px;margin-top:5px;">
-<i>Note</i>: The structure property <code>assemblies</code> is currently not supported.
-Follow <a href="{SOURCE_URL}issues/12" target="_blank">the issue on GitHub</a> to learn more.
 </p>
 """
     BUG_TEMPLATE = {

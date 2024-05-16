@@ -3,59 +3,57 @@ requires = ["flit"]
 build-backend = "flit.buildapi"
 
 [project]
-name =  "ipyoptimade"
+name = "ipyoptimade"
 authors = [
-    {name = "Casper Welzel Andersen", email = "casper+github@welzel.nu"},
-    {name = "Kristjan Eimre", email = "kristan.eimre@epfl.ch"},
-    {name = "Jusong Yu", email = "jusong.yu@psi.ch"},
+  { name = "Casper Welzel Andersen", email = "casper+github@welzel.nu" },
+  { name = "Kristjan Eimre", email = "kristan.eimre@epfl.ch" },
+  { name = "Jusong Yu", email = "jusong.yu@psi.ch" },
 ]
 description = "Jupyter client for searching structures through OPTIMADE API"
 readme = "README.md"
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Framework :: AiiDA",
-    "Framework :: Jupyter",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: MacOS :: MacOS X",
-    "Operating System :: POSIX :: Linux",
-    "Operating System :: Microsoft :: Windows",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Topic :: Database :: Front-Ends",
-    "Topic :: Scientific/Engineering",
-    "Topic :: Scientific/Engineering :: Chemistry",
-    "Topic :: Scientific/Engineering :: Physics",
-    "Topic :: Software Development :: Widget Sets",
+  "Development Status :: 5 - Production/Stable",
+  "Framework :: AiiDA",
+  "Framework :: Jupyter",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: MacOS :: MacOS X",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: Microsoft :: Windows",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Database :: Front-Ends",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Chemistry",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Software Development :: Widget Sets",
 ]
 requires-python = ">=3.9"
 dynamic = ["version"] # read version from src/ipyoptimade/__init__.py
 dependencies = [
-    "appdirs~=1.4.4",
-    "cachecontrol[filecache]~=0.13.1",
-    "ipywidgets~=7.7",
-    "ipywidgets-extended>=1.1.1,<2,!=1.2.0,!=1.2.1",
-    "nglview~=3.0",
-    "optimade~=1.0.0",
-    "ase~=3.22",
-    "pandas~=2.1",
-    "requests~=2.31",
-    "widget_periodictable~=3.1",
-    "semver~=3.0",
+  "appdirs~=1.4.4",
+  "cachecontrol[filecache]~=0.13.1",
+  "ipywidgets~=8.1",
+  "nglview~=3.0",
+  "optimade~=1.0.0",
+  "ase~=3.22",
+  "pandas~=2.1",
+  "requests~=2.31",
+  "widget_periodictable~=4.1",
+  "semver~=3.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pre-commit~=3.6",
-    "pytest~=7.4",
-    "pytest-cov~=4.1",
-    "bumpver~=2023.1129",
+  "pre-commit~=3.6",
+  "pytest~=7.4",
+  "pytest-cov~=4.1",
+  "bumpver>=2023.1129",
+  "pip-tools~=7.4",
 ]
-voila = [
-    "voila~=0.4.0",
-]
+voila = ["voila~=0.5.0"]
 
 [project.urls]
 Documentation = "https://github.com/aiidalab/ipyoptimade#readme"
@@ -65,16 +63,12 @@ Tracker = "https://github.com/aiidalab/ipyoptimade/issues"
 [tool.flit.module]
 name = "ipyoptimade"
 
-[bumpver]
+[tool.bumpver]
 current_version = "0.2.0"
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 commit_message = "Bump version: {old_version} -> {new_version}"
 commit = true
 
-[bumpver.file_patterns]
-"pyproject.toml" = [
-    'current_version = "{version}"',
-]
-"src/ipyoptimade/version.py" = [
-    '__version__ = "{version}"',
-]
+[tool.bumpver.file_patterns]
+"pyproject.toml" = ['current_version = "{version}"']
+"src/ipyoptimade/version.py" = ['__version__ = "{version}"']

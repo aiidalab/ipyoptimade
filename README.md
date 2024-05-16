@@ -3,11 +3,18 @@
 [![MaterialsCloud](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/CasperWA/voila-optimade-client/develop/docs/resources/mcloud_badge.json)](https://materialscloud.org/optimadeclient/)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aiidalab/ipyoptimade/main?urlpath=%2Fvoila%2Frender%2Foptimade-client.ipynb)
 [![codecov](https://codecov.io/gh/aiidalab/ipyoptimade/branch/main/graph/badge.svg)](https://codecov.io/gh/aiidalab/ipyoptimade)
+[![PyPI - Version](https://img.shields.io/pypi/v/ipyoptimade?color=4CC61E)](https://pypi.org/project/ipyoptimade/)
 
 Query for and import structures from [OPTIMADE](https://www.optimade.org) providers (COD, MaterialsCloud, NoMaD, Materials Project, ODBX, OQMD, and more ...).
 The package provides a Jupyter widget for querying OPTIMADE providers and an example Voilà application to stack widgets into an web application.
 
 Current supported OPTIMADE API versions: `1.1.0`, `1.0.0`, `1.0.0-rc.2`, `1.0.0-rc.1`, `0.10.1`
+
+Install with
+
+```bash
+pip install ipyoptimade
+```
 
 ## Run the client
 
@@ -115,34 +122,37 @@ To see the full list of configurations you can call `voila` and pass `--help-all
 
 Set the environment variable `ipyoptimade_DEVELOPMENT_MODE` to `1` (the integer version for `True` (`1`) or `False` (`0`)) in order to force the use of development servers for providers (currently only relevant for Materials Cloud).
 
-## Contribute
+## Development
 
-If you wish to contribute to the application, you can install it in "editable" mode by using the `-e` flag: `pip install -e .[dev]`.
-It is recommended that you use the GitHub-route mentioned above.
+Install with
 
-You should also install `pre-commit` in the cloned git repository by running:
-
-```shell
+```bash
+pip install -e .[dev]
 pre-commit install
 ```
 
-To start making contributions, fork the repository and create PRs.
+Set
 
+```
+export ipyoptimade_DEBUG=1
+```
 
-## For maintainers
+to automatically open and show the debug & error messages in the `OptimadeLog()` widget.
+
+### Making a new release
 
 To create a new release, clone the repository, install development dependencies with `pip install -e '.[dev]'`, and then execute `bumpver update [--major|--minor|--patch] [--tag-num --tag [alpha|beta|rc]]`.
 This will:
 
-  1. Create a tagged release with bumped version and push it to the repository.
-  2. Trigger a GitHub actions workflow that creates a GitHub release and publishes it on PyPI.
+1. Create a tagged release with bumped version and push it to the repository.
+2. Trigger a GitHub actions workflow that creates a GitHub release and publishes it on PyPI.
 
 Additional notes:
 
-  - Use the `--dry` option to preview the release change.
-  - The release tag (e.g. a/b/rc) is determined from the last release.
-    Use the `--tag` option to switch the release tag.
-  - This package follows [semantic versioning](https://semver.org/).
+- Use the `--dry` option to preview the release change.
+- The release tag (e.g. a/b/rc) is determined from the last release.
+  Use the `--tag` option to switch the release tag.
+- This package follows [semantic versioning](https://semver.org/).
 
 ## License
 
@@ -150,6 +160,7 @@ MIT. The terms of the license can be found in the [LICENSE](LICENSE) file.
 
 ## Acknowledgements
 
+<!-- prettier-ignore -->
 | | |
 |---|---|
 | [![BIG-MAP](https://avatars1.githubusercontent.com/u/72801303?s=200&v=4)](https://www.big-map.eu/) | [BIG-MAP](https://www.big-map.eu/); This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 957189. The project is part of [BATTERY 2030+](https://battery2030.eu/), the large-scale European research initiative for inventing the sustainable batteries of the future. |

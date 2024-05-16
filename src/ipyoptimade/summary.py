@@ -6,7 +6,6 @@ import warnings
 import ipywidgets as ipw
 import traitlets
 
-from ipywidgets_extended import DropdownExtended
 import nglview
 
 try:
@@ -209,7 +208,7 @@ document.body.removeChild(link);" />
         self._initialize_options()
         options = self._formats
         options.insert(0, ("Select a format", {}))
-        self.dropdown = DropdownExtended(options=options, layout={"width": "auto"})
+        self.dropdown = ipw.Dropdown(options=options, layout={"width": "auto"})
         self.download_button = ipw.HTML(
             self._download_button_format.format(
                 button_style=self._button_style.value,

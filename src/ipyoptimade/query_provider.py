@@ -1,22 +1,20 @@
-from typing import Union, Tuple, List, Dict, Optional
 import warnings
+from typing import List, Optional, Tuple, Union
 
 import ipywidgets as ipw
 import traitlets
-
 from optimade.models import LinksResourceAttributes
 
+from ipyoptimade.default_parameters import (
+    DISABLE_PROVIDERS,
+    SKIP_DATABASE,
+    SKIP_PROVIDERS,
+)
 from ipyoptimade.subwidgets import (
     ProviderImplementationChooser,
     ProviderImplementationSummary,
 )
 from ipyoptimade.warnings import OptimadeClientWarning
-from ipyoptimade.default_parameters import (
-    PROVIDER_DATABASE_GROUPINGS,
-    SKIP_DATABASE,
-    SKIP_PROVIDERS,
-    DISABLE_PROVIDERS,
-)
 
 
 class OptimadeQueryProviderWidget(ipw.GridspecLayout):
@@ -40,7 +38,6 @@ class OptimadeQueryProviderWidget(ipw.GridspecLayout):
         disable_providers: Optional[List[str]] = None,
         skip_providers: Optional[List[str]] = None,
         skip_databases: Optional[List[str]] = None,
-        provider_database_groupings: Optional[Dict[str, Dict[str, List[str]]]] = None,
         **kwargs,
     ):
         # At the moment, the pagination does not work properly as each database is not tested for
@@ -52,9 +49,6 @@ class OptimadeQueryProviderWidget(ipw.GridspecLayout):
         disable_providers = disable_providers or DISABLE_PROVIDERS
         skip_providers = skip_providers or SKIP_PROVIDERS
         skip_databases = skip_databases or SKIP_DATABASE
-        provider_database_groupings = (
-            provider_database_groupings or PROVIDER_DATABASE_GROUPINGS
-        )
 
         layout = ipw.Layout(width="100%", height="auto")
 
@@ -63,7 +57,6 @@ class OptimadeQueryProviderWidget(ipw.GridspecLayout):
             disable_providers=disable_providers,
             skip_providers=skip_providers,
             skip_databases=skip_databases,
-            provider_database_groupings=provider_database_groupings,
             **kwargs,
         )
 

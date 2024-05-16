@@ -1,30 +1,27 @@
+import json
+import os
+import re
 from collections import OrderedDict
 from enum import Enum, EnumMeta
-import os
-from pathlib import Path
-import re
-from typing import Tuple, List, Union, Iterable
-from urllib.parse import urlencode, urlparse, urlunparse, parse_qs
-
-import json
 from json import JSONDecodeError
+from pathlib import Path
+from typing import Iterable, List, Tuple, Union
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 import appdirs
+import requests
 from cachecontrol import CacheControlAdapter
 from cachecontrol.caches.file_cache import FileCache
 from cachecontrol.heuristics import ExpiresAfter
-from pydantic import ValidationError, AnyUrl  # pylint: disable=no-name-in-module
-import requests
-
-from optimade.models import LinksResource, OptimadeError, Link, LinksResourceAttributes
+from optimade.models import Link, LinksResource, LinksResourceAttributes, OptimadeError
 from optimade.models.links import LinkType
+from pydantic import AnyUrl, ValidationError  # pylint: disable=no-name-in-module
 
 from ipyoptimade.exceptions import (
     ApiVersionError,
     InputError,
 )
 from ipyoptimade.logger import LOGGER
-
 
 # Supported OPTIMADE spec versions
 __optimade_version__ = [
@@ -416,7 +413,7 @@ def get_list_of_valid_providers(  # pylint: disable=too-many-branches
     res = []
     invalid_providers = []
     disable_providers = disable_providers or []
-    skip_providers = skip_providers or ["exmpl", "optimade", "aiida"]
+    skip_providers = skip_providers or ["exmpl"]
 
     for entry in providers:
         provider = LinksResource(**entry)
@@ -481,7 +478,7 @@ def get_list_of_valid_providers(  # pylint: disable=too-many-branches
 
         res.append((attributes.name, attributes))
 
-    return res + invalid_providers, [name for name, _ in invalid_providers]
+    return res, [name for name, _ in invalid_providers]
 
 
 def validate_api_version(version: str, raise_on_fail: bool = True) -> str:
