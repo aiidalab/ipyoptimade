@@ -2,49 +2,36 @@
 
 The lists are set, based on the status of providers from
 https://www.optimade.org/providers-dashboard/.
-
-If the provider has no available databases, it should be put into the SKIP_PROVIDERS list,
-meaning it will not be supported.
-Providers in the DISABLE_PROVIDERS list are ones the client should support,
-but cannot because of one issue or another.
 """
 
+# If the provider has no available databases, it should be put into the SKIP_PROVIDERS list,
+# meaning it will not be supported.
 SKIP_PROVIDERS = [
-    "exmpl",
-    "optimade",
+    "matcloud",
     "aiida",
     "ccpnc",
-    "matcloud",
-    "necro",
     "httk",
+    "optimade",
+    "optimake",
     "pcod",
+    "exmpl",
+    "necro",
 ]
 
+# Providers in the DISABLE_PROVIDERS list are ones the client should support,
+# but cannot because of one issue or another.
 DISABLE_PROVIDERS = [
+    "aflow",
+    "cmr",
     "cod",
-    "tcod",
+    "jarvis",
+    "mpdd",
+    "mpds",
+    "mpod",
     "nmd",
     "oqmd",
-    "aflow",
-    "mpds",
-    "jarvis",
+    "tcod",
 ]
-
-PROVIDER_DATABASE_GROUPINGS = {
-    "Materials Cloud": {
-        "Main Projects": ["mc3d", "mc2d"],
-        "Contributed Projects": [
-            "2dtopo",
-            "pyrene-mofs",
-            "scdm",
-            "stoceriaitf",
-            "tc-applicability",
-            "tin-antimony-sulfoiodide",
-            "curated-cofs",
-        ],
-    }
-}
-
 
 SKIP_DATABASE = {
     "Materials Cloud": ["optimade-sample", "li-ion-conductors", "sssp"],

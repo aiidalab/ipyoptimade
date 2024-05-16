@@ -1,8 +1,7 @@
 # pylint: disable=protected-access
-from copy import deepcopy
 import os
-from typing import Dict, List, Tuple, Union
 import urllib.parse
+from typing import Dict, List, Tuple, Union
 
 try:
     import simplejson as json
@@ -12,9 +11,6 @@ except ImportError:
 import ipywidgets as ipw
 import requests
 import traitlets
-
-from ipywidgets_extended.dropdown import DropdownExtended
-
 from optimade.models import LinksResourceAttributes
 from optimade.models.links import LinkType
 
@@ -22,17 +18,16 @@ from ipyoptimade.exceptions import OptimadeClientError, QueryError
 from ipyoptimade.logger import LOGGER
 from ipyoptimade.subwidgets.results import ResultsPageChooser
 from ipyoptimade.utils import (
+    SESSION,
+    TIMEOUT_SECONDS,
     get_list_of_valid_providers,
     get_versioned_base_url,
     handle_errors,
     ordered_query_url,
     perform_optimade_query,
-    SESSION,
-    TIMEOUT_SECONDS,
     update_old_links_resources,
     validate_api_version,
 )
-
 
 __all__ = ("ProviderImplementationChooser", "ProviderImplementationSummary")
 
@@ -50,7 +45,7 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
     )
 
     HINT = {"provider": "Select a provider", "child_dbs": "Select a database"}
-    INITIAL_CHILD_DBS = [("", (("No provider chosen", None),))]
+    INITIAL_CHILD_DBS = [("No provider chosen", None)]
 
     def __init__(
         self,
@@ -58,14 +53,12 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
         disable_providers: List[str] = None,
         skip_providers: List[str] = None,
         skip_databases: Dict[str, List[str]] = None,
-        provider_database_groupings: Dict[str, Dict[str, List[str]]] = None,
         **kwargs,
     ):
         self.child_db_limit = (
             child_db_limit if child_db_limit and child_db_limit > 0 else 10
         )
         self.skip_child_dbs = skip_databases or {}
-        self.child_db_groupings = provider_database_groupings or {}
         self.offset = 0
         self.number = 1
         self.__perform_query = True
@@ -92,16 +85,14 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
             )
             providers.insert(1, ("Local server", local_provider))
 
-        self.providers = DropdownExtended(
+        self.providers = ipw.Dropdown(
             options=providers,
-            disabled_options=invalid_providers,
+            # disabled_options=invalid_providers,
             layout=ipw.Layout(width="auto"),
         )
 
         self.show_child_dbs = ipw.Layout(width="auto", display="none")
-        self.child_dbs = DropdownExtended(
-            grouping=self.INITIAL_CHILD_DBS, layout=self.show_child_dbs
-        )
+        self.child_dbs = ipw.Dropdown(layout=self.show_child_dbs)
         self.page_chooser = ResultsPageChooser(
             page_limit=self.child_db_limit, layout=self.show_child_dbs
         )
@@ -146,43 +137,52 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
         self.providers.index = 0
 
         self.show_child_dbs.display = "none"
-        self.child_dbs.grouping = self.INITIAL_CHILD_DBS
+        self.child_dbs.options = self.INITIAL_CHILD_DBS
 
     def _observe_providers(self, change: dict):
         """Update child database dropdown upon changing provider"""
-        value = change["new"]
-        self.show_child_dbs.display = "none"
-        self.provider = value
-        if value is None or not value:
+        try:
+            value = change["new"]
             self.show_child_dbs.display = "none"
-            self.child_dbs.grouping = self.INITIAL_CHILD_DBS
-            self.providers.index = 0
-            self.child_dbs.index = 0
-        else:
-            self._initialize_child_dbs()
-            if sum([len(_[1]) for _ in self.child_dbs.grouping]) <= 2:
-                # The provider either has 0 or 1 implementations
-                # or we have failed to retrieve any implementations.
-                # Automatically choose the 1 implementation (if there),
-                # while otherwise keeping the dropdown disabled.
+            self.provider = value
+            if value is None or not value:
                 self.show_child_dbs.display = "none"
-                try:
-                    self.child_dbs.index = 1
-                    LOGGER.debug(
-                        "Changed child_dbs index. New child_dbs: %s", self.child_dbs
-                    )
-                except IndexError:
-                    pass
+                self.child_dbs.options = self.INITIAL_CHILD_DBS
+                self.providers.index = 0
+                self.child_dbs.index = 0
             else:
-                self.show_child_dbs.display = None
+                self._initialize_child_dbs()
+                self.child_dbs.index = 0
+                if len(self.child_dbs.options) <= 2:
+                    # The provider either has 0 or 1 implementations
+                    # or we have failed to retrieve any implementations.
+                    # Automatically choose the 1 implementation (if there),
+                    # while otherwise keeping the dropdown disabled.
+                    self.show_child_dbs.display = "none"
+                    try:
+                        self.child_dbs.index = 1
+                        LOGGER.debug(
+                            "Changed child_dbs index. New child_dbs: %s", self.child_dbs
+                        )
+                    except IndexError:
+                        pass
+                else:
+                    self.show_child_dbs.display = None
+        except Exception as e:
+            # Without this, errors in callbacks don't seem to be logged/displayed
+            LOGGER.error(str(e), exc_info=True)
 
     def _observe_child_dbs(self, change: dict):
         """Update database traitlet with base URL for chosen child database"""
-        value = change["new"]
-        if value is None or not value:
-            self.database = "", None
-        else:
-            self.database = self.child_dbs.label.strip(), self.child_dbs.value
+        try:
+            value = change["new"]
+            if value is None or not value:
+                self.database = "", None
+            else:
+                self.database = self.child_dbs.label.strip(), self.child_dbs.value
+        except Exception as e:
+            # Without this, errors in callbacks don't seem to be logged/displayed
+            LOGGER.error(str(e), exc_info=True)
 
     @staticmethod
     def _remove_current_dropdown_option(dropdown: ipw.Dropdown) -> tuple:
@@ -286,7 +286,7 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
                     self.providers.value,
                 )
                 self.show_child_dbs.display = "none"
-                self.child_dbs.grouping = self.INITIAL_CHILD_DBS
+                self.child_dbs.options = self.INITIAL_CHILD_DBS
 
         else:
             self.unfreeze()
@@ -300,8 +300,8 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
             self.HINT["child_dbs"] if data else "No valid implementations found"
         )
         new_data = list(data)
-        new_data.insert(0, ("", [(first_choice, None)]))
-        self.child_dbs.grouping = new_data
+        new_data.insert(0, (first_choice, None))
+        self.child_dbs.options = new_data
 
     def _update_child_dbs(
         self, data: List[dict], skip_dbs: List[str] = None
@@ -310,11 +310,7 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
         List[List[Union[str, List[Tuple[str, LinksResourceAttributes]]]]],
     ]:
         """Update child DB dropdown from response data"""
-        child_dbs = (
-            {"": []}
-            if self.providers.label not in self.child_db_groupings
-            else deepcopy(self.child_db_groupings[self.providers.label])
-        )
+        child_dbs = []
         exclude_dbs = []
         skip_dbs = skip_dbs or []
 
@@ -363,24 +359,7 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
                 exclude_dbs.append(child_db.id)
                 continue
 
-            if self.providers.label in self.child_db_groupings:
-                for group, ids in self.child_db_groupings[self.providers.label].items():
-                    if child_db.id in ids:
-                        index = child_dbs[group].index(child_db.id)
-                        child_dbs[group][index] = (attributes.name, attributes)
-                        break
-                else:
-                    if "" in child_dbs:
-                        child_dbs[""].append((attributes.name, attributes))
-                    else:
-                        child_dbs[""] = [(attributes.name, attributes)]
-            else:
-                child_dbs[""].append((attributes.name, attributes))
-
-        if self.providers.label in self.child_db_groupings:
-            for group, ids in tuple(child_dbs.items()):
-                child_dbs[group] = [_ for _ in ids if isinstance(_, tuple)]
-        child_dbs = list(child_dbs.items())
+            child_dbs.append((attributes.name, attributes))
 
         LOGGER.debug("Final updated child_dbs: %s", child_dbs)
 
@@ -486,7 +465,7 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
                     self.providers.value,
                 )
                 self.show_child_dbs.display = "none"
-                self.child_dbs.grouping = self.INITIAL_CHILD_DBS
+                self.child_dbs.options = self.INITIAL_CHILD_DBS
 
         else:
             self.unfreeze()
