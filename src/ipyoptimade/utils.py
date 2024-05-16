@@ -413,7 +413,7 @@ def get_list_of_valid_providers(  # pylint: disable=too-many-branches
     res = []
     invalid_providers = []
     disable_providers = disable_providers or []
-    skip_providers = skip_providers or []
+    skip_providers = skip_providers or ["exmpl"]
 
     for entry in providers:
         provider = LinksResource(**entry)
