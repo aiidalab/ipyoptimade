@@ -139,6 +139,12 @@ export ipyoptimade_DEBUG=1
 
 to automatically open and show the debug & error messages in the `OptimadeLog()` widget.
 
+Test voila with
+
+```bash
+voila optimade-client.ipynb
+```
+
 ### Making a new release
 
 To create a new release, clone the repository, install development dependencies with `pip install -e '.[dev]'`, and then execute `bumpver update [--major|--minor|--patch] [--tag-num --tag [alpha|beta|rc]]`.
