@@ -190,7 +190,7 @@ def perform_optimade_query(  # pylint: disable=too-many-arguments,too-many-branc
             "errors": [
                 {
                     "detail": (
-                        f"CLIENT: Connection error or timeout.\nURL: {complete_url}\n"
+                        f"CLIENT: Connection error or timeout.<br>URL: {complete_url}<br>"
                         f"Exception: {exc!r}"
                     )
                 }

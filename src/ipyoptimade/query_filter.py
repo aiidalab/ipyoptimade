@@ -1,17 +1,17 @@
-from enum import Enum, auto
-from typing import List, Union
 import traceback
-import traitlets
+from enum import Enum, auto
+from json import JSONDecodeError
+from typing import List, Union
+
 import ipywidgets as ipw
 import requests
 import semver
-from json import JSONDecodeError
-
+import traitlets
 from optimade.adapters import Structure
 from optimade.adapters.structures.utils import species_from_species_at_sites
 from optimade.models import LinksResourceAttributes
-from optimade.models.utils import CHEMICAL_SYMBOLS
 from optimade.models.types import SemanticVersion
+from optimade.models.utils import CHEMICAL_SYMBOLS
 
 from ipyoptimade.exceptions import BadResource, QueryError
 from ipyoptimade.logger import LOGGER
@@ -22,14 +22,14 @@ from ipyoptimade.subwidgets import (
     StructureDropdown,
 )
 from ipyoptimade.utils import (
+    SESSION,
+    TIMEOUT_SECONDS,
     ButtonStyle,
     check_entry_properties,
+    get_sortable_fields,
     handle_errors,
     ordered_query_url,
     perform_optimade_query,
-    get_sortable_fields,
-    SESSION,
-    TIMEOUT_SECONDS,
 )
 
 
@@ -475,17 +475,7 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
                 }
             return response
 
-        # Avoid structures with null positions and with assemblies.
-        add_to_filter = 'NOT structure_features HAS ANY "assemblies"'
-        if not self._uses_new_structure_features():
-            add_to_filter += ',"unknown_positions"'
-
         optimade_filter = self.filters.collect_value()
-        optimade_filter = (
-            "( {} ) AND ( {} )".format(optimade_filter, add_to_filter)
-            if optimade_filter and add_to_filter
-            else optimade_filter or add_to_filter or None
-        )
         LOGGER.debug("Querying with filter: %s", optimade_filter)
 
         # OPTIMADE queries

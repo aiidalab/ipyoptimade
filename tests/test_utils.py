@@ -69,14 +69,12 @@ def test_ordered_query_url():
 
     normal_url = (
         "https://optimade.materialsproject.org/v1/structures?filter=%28+nelements%3E%3D1+AND+"
-        "nelements%3C%3D9+AND+nsites%3E%3D1+AND+nsites%3C%3D444+%29+AND+%28+NOT+structure_features"
-        "+HAS+ANY+%22assemblies%22+%29&page_limit=25&page_number=1&page_offset=30&response_format"
+        "nelements%3C%3D9+AND+nsites%3E%3D1+AND+nsites%3C%3D444+%29&page_limit=25&page_number=1&page_offset=30&response_format"
         "=json"
     )
     multi_query_param_url = (
         "https://optimade.materialsproject.org/v1/structures?filter=%28+nelements%3E%3D1+AND+"
-        "nelements%3C%3D9+AND+nsites%3E%3D1+AND+nsites%3C%3D444+%29+AND+%28+NOT+structure_features"
-        "+HAS+ANY+%22assemblies%22+%29&page_limit=25&page_number=1&page_offset=30&response_format"
+        "nelements%3C%3D9+AND+nsites%3E%3D1+AND+nsites%3C%3D444+%29&page_limit=25&page_number=1&page_offset=30&response_format"
         "=json&response_format=xml"
     )
 
