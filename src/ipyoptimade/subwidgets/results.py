@@ -1,12 +1,11 @@
 import typing
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
 
 import ipywidgets as ipw
 import traitlets
 
 from ipyoptimade.exceptions import InputError
 from ipyoptimade.logger import LOGGER
-
 
 __all__ = ("StructureDropdown", "ResultsPageChooser")
 
@@ -160,19 +159,20 @@ class ResultsPageChooser(ipw.HBox):  # pylint: disable=too-many-instance-attribu
         self.button_last.disabled = self._cache["buttons"]["last"]
 
     @property
-    def data_returned(self) -> int:
+    def data_returned(self):
         """Total number of entities"""
         return self._data_returned
 
     @data_returned.setter
-    def data_returned(self, value: int):
+    def data_returned(self, value):
         """Set total number of entities"""
-        try:
-            value = int(value)
-        except (TypeError, ValueError) as exc:
-            raise InputError("data_returned must be an integer") from exc
-        else:
-            self._data_returned = value
+        # try:
+        #     value = int(value)
+        # except (TypeError, ValueError) as exc:
+        #     raise InputError("data_returned must be an integer") from exc
+        # else:
+        #     self._data_returned = value
+        self._data_returned = value
 
     @property
     def data_available(self) -> int:
@@ -195,7 +195,9 @@ class ResultsPageChooser(ipw.HBox):  # pylint: disable=too-many-instance-attribu
         if self.__last_page_offset is not None:
             return self.__last_page_offset
 
-        if self.data_returned <= self._page_limit:
+        if self.data_returned is None:
+            res = 0
+        elif self.data_returned <= self._page_limit:
             res = 0
         elif self.data_returned % self._page_limit == 0:
             res = self.data_returned - self._page_limit
@@ -353,7 +355,9 @@ class ResultsPageChooser(ipw.HBox):  # pylint: disable=too-many-instance-attribu
             self.button_first.disabled = True
             self.button_prev.disabled = True
 
-        if self.data_returned > self._page_limit:
+        if self.data_returned is None:
+            result_range = f"{offset + 1}-{offset + self._page_limit}"
+        elif self.data_returned > self._page_limit:
             if offset == self._last_page_offset or number == self._last_page_number:
                 result_range = f"{offset + 1}-{self.data_returned}"
             else:
@@ -373,6 +377,10 @@ class ResultsPageChooser(ipw.HBox):  # pylint: disable=too-many-instance-attribu
             self.button_next.disabled = False
             self.button_last.disabled = False
 
+        # if no data_returned available, disable next button
+        if self.data_returned is None:
+            self.button_next.disabled = False
+
         self._update_cache(page_offset=offset, page_number=number)
 
     def set_pagination_data(
@@ -383,6 +391,8 @@ class ResultsPageChooser(ipw.HBox):  # pylint: disable=too-many-instance-attribu
         reset_cache: bool = False,
     ):
         """Set data needed to 'activate' this pagination widget"""
+        if self.data_returned is None:
+            self.data_returned = data_returned
         if data_returned is not None:
             self.data_returned = data_returned
         if data_available is not None:
