@@ -145,6 +145,8 @@ Test voila with
 voila optimade-client.ipynb
 ```
 
+If dependencies are updated, update `requirements.txt` file that is used for the Docker image used in binder. The command to update the file is included at the top of `requirements.txt`.
+
 ### Making a new release
 
 To create a new release, clone the repository, install development dependencies with `pip install -e '.[dev]'`, and then execute `bumpver update [--major|--minor|--patch] [--tag-num --tag [alpha|beta|rc]]`.
