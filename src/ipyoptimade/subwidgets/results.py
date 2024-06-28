@@ -377,7 +377,7 @@ class ResultsPageChooser(ipw.HBox):  # pylint: disable=too-many-instance-attribu
             self.button_next.disabled = False
             self.button_last.disabled = False
 
-        # if no data_returned available, disable next button
+        # if no data_returned available, don't disable next button
         if self.data_returned is None:
             self.button_next.disabled = False
 
@@ -391,10 +391,9 @@ class ResultsPageChooser(ipw.HBox):  # pylint: disable=too-many-instance-attribu
         reset_cache: bool = False,
     ):
         """Set data needed to 'activate' this pagination widget"""
-        if self.data_returned is None:
-            self.data_returned = data_returned
-        if data_returned is not None:
-            self.data_returned = data_returned
+
+        self.data_returned = data_returned
+
         if data_available is not None:
             self.data_available = data_available
         if links_to_page is not None:

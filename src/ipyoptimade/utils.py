@@ -506,7 +506,7 @@ def get_list_of_providers(  # pylint: disable=too-many-branches
         # res.append((attributes.name, attributes))
         res.append(
             {
-                "text": attributes.name,
+                "text": f"{provider.id}: {attributes.name}",
                 "value": attributes,
                 "disabled": False,
             }

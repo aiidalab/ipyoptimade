@@ -45,9 +45,9 @@ def test_exmpl_not_in_list():
     """Make sure the 'exmpl' database provider is not in the final list"""
     from ipyoptimade.utils import get_list_of_providers
 
-    exmpl = "Example provider"
-    mcloud = "Materials Cloud"
-    odbx = "open database of xtals"
+    exmpl = "example: Example provider"
+    mcloud = "mcloud: Materials Cloud"
+    odbx = "odbx: open database of xtals"
 
     providers_list = get_list_of_providers()
 
