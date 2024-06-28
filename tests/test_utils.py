@@ -43,21 +43,23 @@ def test_fetch_providers_content():
 
 def test_exmpl_not_in_list():
     """Make sure the 'exmpl' database provider is not in the final list"""
-    from ipyoptimade.utils import get_list_of_valid_providers
+    from ipyoptimade.utils import get_list_of_providers
 
     exmpl = "Example provider"
     mcloud = "Materials Cloud"
     odbx = "open database of xtals"
 
-    list_of_database_providers, disabled_providers = get_list_of_valid_providers()
-    providers = [name for name, _ in list_of_database_providers]
+    providers_list = get_list_of_providers()
 
-    assert exmpl not in providers, providers
-    assert mcloud in providers, providers
-    assert odbx in providers, providers
-    assert (
-        mcloud not in disabled_providers or odbx not in disabled_providers
-    ), disabled_providers
+    enabled_providers = [p["text"] for p in providers_list if not p["disabled"]]
+    disabled_providers = [p["text"] for p in providers_list if p["disabled"]]
+
+    assert exmpl not in enabled_providers, providers_list
+    assert exmpl not in disabled_providers, providers_list
+    assert mcloud in enabled_providers, providers_list
+    assert mcloud not in disabled_providers, providers_list
+    assert odbx in enabled_providers, providers_list
+    assert odbx not in disabled_providers, providers_list
 
 
 def test_ordered_query_url():

@@ -402,12 +402,18 @@ def get_versioned_base_url(  # pylint: disable=too-many-branches
     return ""
 
 
-def get_list_of_valid_providers(  # pylint: disable=too-many-branches
+def get_list_of_providers(  # pylint: disable=too-many-branches
     disable_providers: List[str] = None, skip_providers: List[str] = None
 ) -> Tuple[List[Tuple[str, LinksResourceAttributes]], List[str]]:
     """Get curated list of database providers
 
-    Return formatted list of tuples to use with a dropdown-widget.
+    Return formatted list to use with a dropdown-widget, with a format of
+    [{
+        "text": <provider name> [(reason for disabling)],
+        "value": <LinksResourceAttributes>,
+        "disabled": True/False
+    }]
+
     """
     providers = fetch_providers()
     res = []
@@ -426,7 +432,14 @@ def get_list_of_valid_providers(  # pylint: disable=too-many-branches
 
         if provider.id in disable_providers:
             LOGGER.debug("Temporarily disabling provider: %s", str(provider))
-            invalid_providers.append((attributes.name, attributes))
+            # invalid_providers.append((attributes.name, attributes))
+            invalid_providers.append(
+                {
+                    "text": f"{attributes.name} (disabled by app)",
+                    "value": "",
+                    "disabled": True,
+                }
+            )
             continue
 
         # Skip if not an 'external' link_type database
@@ -442,28 +455,35 @@ def get_list_of_valid_providers(  # pylint: disable=too-many-branches
         # Disable if there is no base URL
         if attributes.base_url is None:
             LOGGER.debug("Base URL found to be None for provider: %s", str(provider))
-            invalid_providers.append((attributes.name, attributes))
+            # invalid_providers.append((attributes.name, attributes))
+            invalid_providers.append(
+                {
+                    "text": f"{attributes.name} (base URL missing)",
+                    "value": "",
+                    "disabled": True,
+                }
+            )
             continue
 
         # Use development servers for providers if desired and available
-        if DEVELOPMENT_MODE and provider.id in DEVELOPMENT_PROVIDERS:
-            development_base_url = DEVELOPMENT_PROVIDERS[provider.id]
+        # if DEVELOPMENT_MODE and provider.id in DEVELOPMENT_PROVIDERS:
+        #     development_base_url = DEVELOPMENT_PROVIDERS[provider.id]
 
-            LOGGER.debug(
-                "Setting base URL for %s to their development server", provider.id
-            )
+        #     LOGGER.debug(
+        #         "Setting base URL for %s to their development server", provider.id
+        #     )
 
-            if isinstance(attributes.base_url, dict):
-                attributes.base_url["href"] = development_base_url
-            elif isinstance(attributes.base_url, Link):
-                attributes.base_url.href = development_base_url
-            elif isinstance(attributes.base_url, (AnyUrl, str)):
-                attributes.base_url = development_base_url
-            else:
-                raise TypeError(
-                    "base_url not found to be a valid type. Must be either an optimade.models."
-                    f"Link or a dict. Found type: {type(attributes.base_url)}"
-                )
+        #     if isinstance(attributes.base_url, dict):
+        #         attributes.base_url["href"] = development_base_url
+        #     elif isinstance(attributes.base_url, Link):
+        #         attributes.base_url.href = development_base_url
+        #     elif isinstance(attributes.base_url, (AnyUrl, str)):
+        #         attributes.base_url = development_base_url
+        #     else:
+        #         raise TypeError(
+        #             "base_url not found to be a valid type. Must be either an optimade.models."
+        #             f"Link or a dict. Found type: {type(attributes.base_url)}"
+        #         )
 
         versioned_base_url = get_versioned_base_url(attributes.base_url)
         if versioned_base_url:
@@ -473,12 +493,29 @@ def get_list_of_valid_providers(  # pylint: disable=too-many-branches
             LOGGER.debug(
                 "Could not determine versioned base URL for provider: %s", str(provider)
             )
-            invalid_providers.append((attributes.name, attributes))
+            # invalid_providers.append((attributes.name, attributes))
+            invalid_providers.append(
+                {
+                    "text": f"{attributes.name} (Could not determine versioned base URL)",
+                    "value": "",
+                    "disabled": True,
+                }
+            )
             continue
 
-        res.append((attributes.name, attributes))
+        # res.append((attributes.name, attributes))
+        res.append(
+            {
+                "text": attributes.name,
+                "value": attributes,
+                "disabled": False,
+            }
+        )
 
-    return res, [name for name, _ in invalid_providers]
+    # append invalid providers at the end
+    res.extend(invalid_providers)
+
+    return res
 
 
 def validate_api_version(version: str, raise_on_fail: bool = True) -> str:

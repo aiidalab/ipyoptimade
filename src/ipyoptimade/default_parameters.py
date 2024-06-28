@@ -21,16 +21,16 @@ SKIP_PROVIDERS = [
 # Providers in the DISABLE_PROVIDERS list are ones the client should support,
 # but cannot because of one issue or another.
 DISABLE_PROVIDERS = [
-    "aflow",
-    "cmr",
-    "cod",
-    "jarvis",
-    "mpdd",
-    "mpds",
-    "mpod",
-    "nmd",
-    "oqmd",
-    "tcod",
+    # "aflow",
+    # "cmr",
+    # "cod",
+    # "jarvis",
+    # "mpdd",
+    # "mpds",
+    # "mpod",
+    # "nmd",
+    # "oqmd",
+    # "tcod",
 ]
 
 SKIP_DATABASE = {

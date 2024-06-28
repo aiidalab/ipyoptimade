@@ -13,6 +13,7 @@ import requests
 import traitlets
 from optimade.models import LinksResourceAttributes
 from optimade.models.links import LinkType
+from widget_dropdown import DropdownWidget
 
 from ipyoptimade.exceptions import OptimadeClientError, QueryError
 from ipyoptimade.logger import LOGGER
@@ -20,7 +21,7 @@ from ipyoptimade.subwidgets.results import ResultsPageChooser
 from ipyoptimade.utils import (
     SESSION,
     TIMEOUT_SECONDS,
-    get_list_of_valid_providers,
+    get_list_of_providers,
     get_versioned_base_url,
     handle_errors,
     ordered_query_url,
@@ -44,8 +45,9 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
         default_value=("", None),
     )
 
-    HINT = {"provider": "Select a provider", "child_dbs": "Select a database"}
-    INITIAL_CHILD_DBS = [("No provider chosen", None)]
+    HINT_PROVIDER = {"text": "Select a provider", "value": "", "disabled": True}
+    HINT_CHILD_DBS = {"text": "Select a database", "value": "", "disabled": True}
+    INITIAL_CHILD_DBS = [{"text": "No provider chosen", "value": "", "disabled": True}]
 
     def __init__(
         self,
@@ -66,11 +68,12 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
 
         self.debug = bool(os.environ.get("ipyoptimade_DEBUG", None))
 
-        providers = []
-        providers, invalid_providers = get_list_of_valid_providers(
+        providers_list = []
+        providers_list = get_list_of_providers(
             disable_providers=disable_providers, skip_providers=skip_providers
         )
-        providers.insert(0, (self.HINT["provider"], {}))
+        providers_list.insert(0, self.HINT_PROVIDER)
+
         if self.debug:
             from ipyoptimade.utils import VERSION_PARTS
 
@@ -83,16 +86,21 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
                     "link_type": "external",
                 }
             )
-            providers.insert(1, ("Local server", local_provider))
+            local_provider_entry = {
+                "text": "Local server",
+                "value": local_provider,
+                "disabled": False,
+            }
+            providers_list.insert(1, local_provider_entry)
 
-        self.providers = ipw.Dropdown(
-            options=providers,
-            # disabled_options=invalid_providers,
-            layout=ipw.Layout(width="auto"),
+        LOGGER.debug(providers_list)
+        self.providers = DropdownWidget(
+            options=providers_list,
+            layout=ipw.Layout(width="auto", margin="2px"),
         )
 
-        self.show_child_dbs = ipw.Layout(width="auto", display="none")
-        self.child_dbs = ipw.Dropdown(layout=self.show_child_dbs)
+        self.show_child_dbs = ipw.Layout(width="auto", margin="2px", display="none")
+        self.child_dbs = DropdownWidget(layout=self.show_child_dbs)
         self.page_chooser = ResultsPageChooser(
             page_limit=self.child_db_limit, layout=self.show_child_dbs
         )
@@ -179,7 +187,7 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
             if value is None or not value:
                 self.database = "", None
             else:
-                self.database = self.child_dbs.label.strip(), self.child_dbs.value
+                self.database = self.child_dbs.value.name.strip(), self.child_dbs.value
         except Exception as e:
             # Without this, errors in callbacks don't seem to be logged/displayed
             LOGGER.error(str(e), exc_info=True)
@@ -296,12 +304,11 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
         data: List[Tuple[str, List[Tuple[str, LinksResourceAttributes]]]],
     ) -> None:
         """Update the child_dbs options with `data`"""
-        first_choice = (
-            self.HINT["child_dbs"] if data else "No valid implementations found"
-        )
-        new_data = list(data)
-        new_data.insert(0, (first_choice, None))
-        self.child_dbs.options = new_data
+        # convert data to the DropdownWidget format
+        options = [self.HINT_CHILD_DBS]
+        for opt in list(data):
+            options.append({"text": opt[0], "value": opt[1], "disabled": False})
+        self.child_dbs.options = options
 
     def _update_child_dbs(
         self, data: List[dict], skip_dbs: List[str] = None
