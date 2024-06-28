@@ -5,7 +5,6 @@ from typing import List, Union
 import ipywidgets as ipw
 from traitlets import traitlets
 
-
 __all__ = ("SortSelector",)
 
 
@@ -23,7 +22,7 @@ class SortSelector(ipw.HBox):
     """
 
     NO_AVAILABLE_FIELDS = "Not available"
-    DEFAULT_FIELD = "nsites"
+    DEFAULT_FIELD = "id"
 
     field = traitlets.Unicode("", allow_none=False)
     order = traitlets.UseEnum(Order, default_value=Order.ASCENDING)
