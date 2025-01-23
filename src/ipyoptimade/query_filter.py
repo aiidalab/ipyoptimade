@@ -115,7 +115,9 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
         self.loading_spinner_output = ipw.Output()
         self.filter_header = ipw.HBox(
             [
-                ipw.HTML('<h4 style="margin:0px;padding:0px;">Apply filters</h4>'),
+                ipw.HTML(
+                    '<h4 style="margin:0px;padding:0px;min-width:84px">Apply filters</h4>'
+                ),
                 self.loading_spinner_output,
             ]
         )

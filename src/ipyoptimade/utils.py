@@ -69,10 +69,10 @@ except ValueError:
 
 
 SPINNER_HTML = """
-<div id="spinner" style="display:inline;">
-    <div style="border: 4px solid #333333; border-radius: 50%;
-    border-top: 4px solid #3498db; width: 12px; height: 12px;
-    animation: spin 2s linear infinite;"></div>
+<div id="spinner" style="display:block; margin: 2px; padding: 0px;">
+    <div style="border: 3px solid #333333; border-radius: 50%;
+    border-top: 3px solid #3498db; width: 14px; height: 14px;
+    animation: spin 2s linear infinite; margin: 0; padding: 0;"></div>
 </div>
 <style>
 @keyframes spin {
