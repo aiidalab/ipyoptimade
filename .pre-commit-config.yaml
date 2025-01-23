@@ -19,7 +19,6 @@ repos:
     hooks:
         - id: nbqa-pyupgrade
           args: [--py39-plus]
-        - id: nbqa-ruff
 
   - repo: https://github.com/kynan/nbstripout
     rev: 0.6.1

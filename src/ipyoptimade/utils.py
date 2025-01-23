@@ -68,6 +68,21 @@ except ValueError:
     DEVELOPMENT_MODE = False
 
 
+SPINNER_HTML = """
+<div id="spinner" style="display:inline;">
+    <div style="border: 4px solid #333333; border-radius: 50%;
+    border-top: 4px solid #3498db; width: 12px; height: 12px;
+    animation: spin 2s linear infinite;"></div>
+</div>
+<style>
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+"""
+
+
 class DefaultingEnum(EnumMeta):
     """Override __getitem__()"""
 

@@ -2,6 +2,7 @@ import traceback
 from enum import Enum, auto
 from json import JSONDecodeError
 from typing import List, Union
+from IPython.display import display
 
 import ipywidgets as ipw
 import requests
@@ -24,6 +25,7 @@ from ipyoptimade.subwidgets import (
 from ipyoptimade.utils import (
     SESSION,
     TIMEOUT_SECONDS,
+    SPINNER_HTML,
     ButtonStyle,
     check_entry_properties,
     get_sortable_fields,
@@ -110,10 +112,14 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
         self.__cached_ranges = {}
         self.__cached_versions = {}
         self.database_version = ""
-
-        self.filter_header = ipw.HTML(
-            '<h4 style="margin:0px;padding:0px;">Apply filters</h4>'
+        self.loading_spinner_output = ipw.Output()
+        self.filter_header = ipw.HBox(
+            [
+                ipw.HTML('<h4 style="margin:0px;padding:0px;">Apply filters</h4>'),
+                self.loading_spinner_output,
+            ]
         )
+
         self.filters = FilterTabs(show_large_filters=not embedded)
         self.filters.freeze()
         self.filters.on_submit(self.retrieve_data)
@@ -157,6 +163,13 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
             **kwargs,
         )
 
+    def _set_loading_spinner(self, on: bool = True):
+        """Show or hide loading spinner"""
+        with self.loading_spinner_output:
+            self.loading_spinner_output.clear_output()
+            if on:
+                display(ipw.HTML(SPINNER_HTML))
+
     @traitlets.observe("database")
     def _on_database_select(self, _):
         """Load chosen database"""
@@ -178,6 +191,7 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
                 self.query_button.description = "Updating ..."
                 self.query_button.icon = "cog"
                 self.query_button.tooltip = "Updating filters ..."
+                self._set_loading_spinner(True)
 
                 self._set_intslider_ranges()
                 self._set_version()
@@ -193,6 +207,7 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
                 self.sort_selector.valid_fields = sorted(
                     get_sortable_fields(self.database[1].base_url)
                 )
+                self._set_loading_spinner(False)
                 self.unfreeze()
 
     def _on_structure_select(self, change):
@@ -244,6 +259,8 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
             self.query_button.icon = "cog"
             self.query_button.tooltip = "Please wait ..."
 
+            self._set_loading_spinner(True)
+
             # Query database
             response = self._query(pageing)
             msg, _ = handle_errors(response)
@@ -263,6 +280,7 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
             self.query_button.description = "Search"
             self.query_button.icon = "search"
             self.query_button.tooltip = "Search"
+            self._set_loading_spinner(False)
             self.unfreeze()
 
     def _sort(self, change: dict) -> None:
@@ -561,6 +579,8 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
             self.query_button.icon = "cog"
             self.query_button.tooltip = "Please wait ..."
 
+            self._set_loading_spinner(True)
+
             # Query database
             response = self._query()
             msg, _ = handle_errors(response)
@@ -600,4 +620,5 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
             self.query_button.description = "Search"
             self.query_button.icon = "search"
             self.query_button.tooltip = "Search"
+            self._set_loading_spinner(False)
             self.unfreeze()
