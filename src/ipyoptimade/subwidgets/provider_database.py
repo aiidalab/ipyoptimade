@@ -366,7 +366,7 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
                 exclude_dbs.append(child_db.id)
                 continue
 
-            child_dbs.append((attributes.name, attributes))
+            child_dbs.append((f"{attributes.name} ({child_db.id})", attributes))
 
         LOGGER.debug("Final updated child_dbs: %s", child_dbs)
 
