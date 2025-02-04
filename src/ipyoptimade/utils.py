@@ -30,13 +30,15 @@ __optimade_version__ = [
     "1.0.0",
 ]
 
-TIMEOUT_SECONDS = 10  # Seconds before URL query timeout is raised
+TIMEOUT_SECONDS = 20  # Seconds before URL query timeout is raised
 
 PROVIDERS_URLS = [
     "https://providers.optimade.org/v1/links",
     "https://raw.githubusercontent.com/Materials-Consortia/providers/master/src"
     "/links/v1/providers.json",
 ]
+
+PROVIDERS_DASHBOARD_URL = "https://www.optimade.org/providers-dashboard/"
 
 CACHE_DIR = Path(appdirs.user_cache_dir("optimade-client", "CasperWA"))
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -81,6 +83,11 @@ SPINNER_HTML = """
 }
 </style>
 """
+
+
+def html_box_div(content, color="red"):
+    """Wrap content in a div with a border"""
+    return f'<div style="border: 2px solid {color}; padding: 5px;">{content}</div>'
 
 
 class DefaultingEnum(EnumMeta):
@@ -617,10 +624,11 @@ def handle_errors(response: dict) -> Tuple[str, set]:
                 f"{'<br> - '.join(details)!r}</font>"
             )
         else:
-            msg = (
-                '<font color="red">Error during querying, '
-                "please try again later.</font>"
-            )
+            msg = '<font color="red">Error during querying.</font>'
+        msg += (
+            "<font color='red'><br/>Please check the log and the server's validation status "
+            f"at <a href='{PROVIDERS_DASHBOARD_URL}'>{PROVIDERS_DASHBOARD_URL}</a>.</font>"
+        )
 
         http_errors = set()
         for raw_error in response.get("errors", []):

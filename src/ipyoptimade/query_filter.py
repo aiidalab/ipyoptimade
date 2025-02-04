@@ -32,6 +32,7 @@ from ipyoptimade.utils import (
     handle_errors,
     ordered_query_url,
     perform_optimade_query,
+    html_box_div,
 )
 
 
@@ -267,7 +268,7 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
             response = self._query(pageing)
             msg, _ = handle_errors(response)
             if msg:
-                self.error_or_status_messages.value = msg
+                self.error_or_status_messages.value = html_box_div(msg)
                 return
 
             # Update list of structures in dropdown widget
@@ -587,7 +588,7 @@ class OptimadeQueryFilterWidget(  # pylint: disable=too-many-instance-attributes
             response = self._query()
             msg, _ = handle_errors(response)
             if msg:
-                self.error_or_status_messages.value = msg
+                self.error_or_status_messages.value = html_box_div(msg)
                 raise QueryError(msg)
 
             # Update list of structures in dropdown widget
