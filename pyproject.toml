@@ -37,13 +37,13 @@ dependencies = [
   "cachecontrol[filecache]~=0.13.1",
   "ipywidgets>=7.6,<9",
   "nglview~=3.0.8",
-  "optimade~=1.0.0",
+  "optimade~=1.0",
   "ase~=3.22",
   "pandas~=2.1",
   "requests~=2.31",
-  "widget_periodictable~=4.1",
+  "widget_periodictable~=4.1.3",
   "semver~=3.0",
-  "widget-dropdown~=0.3.1",
+  "widget-dropdown~=0.4.0",
   "jupyterlab~=4.0",
 ]
 
