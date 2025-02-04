@@ -96,13 +96,26 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
         LOGGER.debug(providers_list)
         self.providers = DropdownWidget(
             options=providers_list,
-            layout=ipw.Layout(width="auto", margin="2px"),
+            styles={
+                "background-color": "#255090",  # 3560A0
+                "color": "white",
+            },
+            layout=ipw.Layout(width="auto", margin="1px", height="25px"),
         )
-
-        self.show_child_dbs = ipw.Layout(width="auto", margin="2px", display="none")
-        self.child_dbs = DropdownWidget(layout=self.show_child_dbs)
+        self.child_dbs = DropdownWidget(
+            styles={
+                "background-color": "#255090",
+                "color": "white",
+            },
+            layout=ipw.Layout(width="auto", margin="1px", height="25px"),
+        )
         self.page_chooser = ResultsPageChooser(
-            page_limit=self.child_db_limit, layout=self.show_child_dbs
+            page_limit=self.child_db_limit,
+            layout=ipw.Layout(width="auto", margin="1px"),
+        )
+        self.show_child_dbs = ipw.Layout(display="none")
+        self.child_dbs_box = ipw.VBox(
+            [self.child_dbs, self.page_chooser], layout=self.show_child_dbs
         )
 
         self.providers.observe(self._observe_providers, names="value")
@@ -115,8 +128,7 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
         super().__init__(
             children=(
                 self.providers,
-                self.child_dbs,
-                self.page_chooser,
+                self.child_dbs_box,
                 self.error_or_status_messages,
             ),
             layout=ipw.Layout(width="auto"),
