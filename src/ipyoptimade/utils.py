@@ -25,6 +25,7 @@ from ipyoptimade.logger import LOGGER
 
 # Supported OPTIMADE spec versions
 __optimade_version__ = [
+    "1.2.0",
     "1.1.0",
     "1.0.1",
     "1.0.0",

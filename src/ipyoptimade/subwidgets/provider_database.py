@@ -576,11 +576,12 @@ class ProviderImplementationChooser(  # pylint: disable=too-many-instance-attrib
         msg = validate_api_version(
             response.get("meta", {}).get("api_version", ""), raise_on_fail=False
         )
-        if msg:
-            self.error_or_status_messages.value = (
-                f"{msg}<br>The provider has been removed."
-            )
-            raise QueryError(msg=msg, remove_target=True)
+        # Newer optimade versions should be backwards compatible with the app, don't just remove them.
+        # if msg:
+        #     self.error_or_status_messages.value = (
+        #         f"{msg}<br>The provider has been removed."
+        #     )
+        #     raise QueryError(msg=msg, remove_target=True)
 
         LOGGER.debug("Manually remove `exclude_ids` if filters are not supported")
         child_db_data = {
